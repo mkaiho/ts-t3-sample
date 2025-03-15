@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: ./docker/workspace/Dockerfile
+    container_name: ts-t3-sample-workspace
+    tty: true
+    volumes:
+      - .:/work/ts-t3-sample
+      - ts-t3-sample_node_modules_volume:/work/ts-t3-sample/node_modules
+    working_dir: /work/ts-t3-sample
+    ports:
+      - 4000:3000
+
+volumes:
+  ts-t3-sample_node_modules_volume:
+
+networks:
+  auth-sample-network:
+    external: true
