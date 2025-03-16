@@ -1,5 +1,13 @@
 version: "3.9"
 
+# Variables for mysql database
+x-mysql-database: &MYSQL_DATABASE devdb
+x-mysql-host: &MYSQL_HOST mysqldb
+x-mysql-port: &MYSQL_PORT 3306
+x-mysql-user: &MYSQL_USER devuser
+x-mysql-password: &MYSQL_PASSWORD devdev
+x-mysql-max-conns: &MYSQL_MAX_CONNS 10
+
 services:
   workspace:
     build:
@@ -13,10 +21,26 @@ services:
     working_dir: /work/ts-t3-sample
     ports:
       - 4000:3000
+  mysqldb:
+    build:
+      context: ./docker/mysql
+      dockerfile: ./Dockerfile
+    container_name: ts-t3-sample-db
+    ports:
+      - 13306:3306
+    volumes:
+      - ./docker/mysql/init.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: *MYSQL_DATABASE
+      MYSQL_USER: *MYSQL_USER
+      MYSQL_PASSWORD: *MYSQL_PASSWORD
 
 volumes:
   ts-t3-sample_node_modules_volume:
 
 networks:
-  auth-sample-network:
+  ts-t3-sample-network:
     external: true

@@ -12,6 +12,7 @@
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
 db.sqlite
+/docker/mysql/data
 
 # next.js
 /.next/
